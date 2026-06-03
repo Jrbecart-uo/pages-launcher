@@ -126,7 +126,9 @@
   .result.show{display:block}
   .result .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ok)}
   .result a{font-weight:800;font-size:19px;color:var(--ink);word-break:break-all;text-decoration:none;border-bottom:3px solid var(--garnet)}
-  .result .note{font-size:12.5px;color:var(--mut);margin-top:8px}
+  .result .wait{display:flex;align-items:center;gap:10px;margin-top:14px;padding:13px 15px;background:#fff5d6;border:1.5px solid #e6b800;border-radius:10px;font-size:15px;font-weight:700;color:#6b4e00;line-height:1.35}
+  .result .wait .clock{font-size:22px;flex:0 0 auto}
+  .result .note{font-size:12.5px;color:var(--mut);margin-top:10px}
 
   .notice{margin:0 0 18px;border:1px solid var(--line);border-left:4px solid var(--garnet);background:var(--surface);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--mut);display:none}
   .notice.show{display:block}
@@ -231,7 +233,8 @@
         <div class="result" id="result">
           <div class="lbl" data-i18n="result.liveAt">Your site is live at</div>
           <a id="liveUrl" target="_blank" rel="noopener"></a>
-          <div class="note" data-i18n="result.note">First build can take ~1 minute. To update later: come back, drop the changed file(s), Publish again.</div>
+          <div class="wait" data-i18n-html="result.wait"><span class="clock">⏱️</span><span>Wait about 1 minute before opening the link — GitHub needs to publish your files first. A "404" right away is normal; it disappears once publishing finishes.</span></div>
+          <div class="note" data-i18n="result.note">To update later: come back, drop the changed file(s), and Publish again.</div>
         </div>
       </section>
     </div>
@@ -285,7 +288,8 @@ const DICT = {
     "s3.hint":"One click creates the repository (if needed), commits your files, and turns on GitHub Pages.",
     "s3.button":"Publish to GitHub Pages",
     "result.liveAt":"Your site is live at",
-    "result.note":"First build can take ~1 minute. To update later: come back, drop the changed file(s), Publish again.",
+    "result.wait":'<span class="clock">⏱️</span><span>Wait about <b>1 minute</b> before opening the link — GitHub needs to publish your files first. A “404” right away is normal; it disappears once publishing finishes.</span>',
+    "result.note":"To update later: come back, drop the changed file(s), and Publish again.",
     "foot.updates":"<b>How updates work:</b> every Publish is one commit. Drop one file to change one page, or the whole folder to replace everything — history is kept automatically.",
     "foot.privacy":"Runs entirely in your browser and talks directly to GitHub. Your files are never sent anywhere else.",
     "notice.demo":"<b>Demo mode.</b> Sign-in with GitHub is not configured yet, so use the <b>Advanced</b> token option below. Deploy the OAuth worker and fill in <code>CONFIG</code> to enable one-click sign-in.",
@@ -354,7 +358,8 @@ const DICT = {
     "s3.hint":"Un clic crée le dépôt (au besoin), enregistre vos fichiers et active GitHub Pages.",
     "s3.button":"Publier sur GitHub Pages",
     "result.liveAt":"Votre site est en ligne à",
-    "result.note":"La première construction peut prendre ~1 minute. Pour mettre à jour : revenez, déposez le ou les fichiers modifiés, puis publiez de nouveau.",
+    "result.wait":'<span class="clock">⏱️</span><span>Attendez environ <b>1 minute</b> avant d’ouvrir le lien — GitHub doit d’abord publier vos fichiers. Une erreur « 404 » au début est normale ; elle disparaît une fois la publication terminée.</span>',
+    "result.note":"Pour mettre à jour : revenez, déposez le ou les fichiers modifiés, puis publiez de nouveau.",
     "foot.updates":"<b>Fonctionnement des mises à jour :</b> chaque publication est une validation (commit). Déposez un fichier pour changer une page, ou tout le dossier pour tout remplacer — l'historique est conservé automatiquement.",
     "foot.privacy":"Fonctionne entièrement dans votre navigateur et communique directement avec GitHub. Vos fichiers ne sont envoyés nulle part ailleurs.",
     "notice.demo":"<b>Mode démo.</b> La connexion avec GitHub n'est pas encore configurée ; utilisez l'option <b>Avancé</b> (jeton) ci-dessous. Déployez le worker OAuth et remplissez <code>CONFIG</code> pour activer la connexion en un clic.",
