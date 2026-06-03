@@ -127,6 +127,7 @@
   .result .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ok)}
   .result a{font-weight:800;font-size:19px;color:var(--ink);word-break:break-all;text-decoration:none;border-bottom:3px solid var(--garnet)}
   .result .wait{display:flex;align-items:center;gap:10px;margin-top:14px;padding:13px 15px;background:#fff5d6;border:1.5px solid #e6b800;border-radius:10px;font-size:15px;font-weight:700;color:#6b4e00;line-height:1.35}
+  .result .wait.ready{background:var(--ok-soft);border-color:var(--ok);color:#1e5c39}
   .result .wait .clock{font-size:22px;flex:0 0 auto}
   .result .note{font-size:12.5px;color:var(--mut);margin-top:10px}
 
@@ -233,7 +234,7 @@
         <div class="result" id="result">
           <div class="lbl" data-i18n="result.liveAt">Your site is live at</div>
           <a id="liveUrl" target="_blank" rel="noopener"></a>
-          <div class="wait" data-i18n-html="result.wait"><span class="clock">⏱️</span><span>Wait about 1 minute before opening the link — GitHub needs to publish your files first. A "404" right away is normal; it disappears once publishing finishes.</span></div>
+          <div class="wait" id="resultWait" data-i18n-html="result.wait"><span class="clock">⏱️</span><span>Wait about 1 minute before opening the link — GitHub needs to publish your files first. A "404" right away is normal; it disappears once publishing finishes.</span></div>
           <div class="note" data-i18n="result.note">To update later: come back, drop the changed file(s), and Publish again.</div>
         </div>
       </section>
@@ -289,6 +290,7 @@ const DICT = {
     "s3.button":"Publish to GitHub Pages",
     "result.liveAt":"Your site is live at",
     "result.wait":'<span class="clock">⏱️</span><span>Wait about <b>1 minute</b> before opening the link — GitHub needs to publish your files first. A “404” right away is normal; it disappears once publishing finishes.</span>',
+    "result.ready":'<span class="clock">✅</span><span><b>Published and ready.</b> Your site is live — click the link above to open it.</span>',
     "result.note":"To update later: come back, drop the changed file(s), and Publish again.",
     "foot.updates":"<b>How updates work:</b> every Publish is one commit. Drop one file to change one page, or the whole folder to replace everything — history is kept automatically.",
     "foot.privacy":"Runs entirely in your browser and talks directly to GitHub. Your files are never sent anywhere else.",
@@ -314,6 +316,10 @@ const DICT = {
     "log.pagesOn":"Pages enabled",
     "log.pagesAlready":"Pages already on — site will rebuild",
     "log.pagesVerify":"Pushed (verify Pages in repository Settings)",
+    "log.waiting":"Waiting for GitHub to publish your site (~1 min)",
+    "log.waitingN":"Waiting for GitHub to publish your site… {s}s",
+    "log.waitOk":"Published — your site is ready",
+    "log.waitSlow":"Still publishing — your link will work shortly",
     "err.token401":"Token rejected — check it is valid and unexpired.",
     "err.ghstatus":"GitHub responded with {status}",
     "err.createRepo":"Could not create the repository ({status}). The token may lack Administration: write.",
@@ -359,6 +365,7 @@ const DICT = {
     "s3.button":"Publier sur GitHub Pages",
     "result.liveAt":"Votre site est en ligne à",
     "result.wait":'<span class="clock">⏱️</span><span>Attendez environ <b>1 minute</b> avant d’ouvrir le lien — GitHub doit d’abord publier vos fichiers. Une erreur « 404 » au début est normale ; elle disparaît une fois la publication terminée.</span>',
+    "result.ready":'<span class="clock">✅</span><span><b>Publié et prêt.</b> Votre site est en ligne — cliquez sur le lien ci-dessus pour l’ouvrir.</span>',
     "result.note":"Pour mettre à jour : revenez, déposez le ou les fichiers modifiés, puis publiez de nouveau.",
     "foot.updates":"<b>Fonctionnement des mises à jour :</b> chaque publication est une validation (commit). Déposez un fichier pour changer une page, ou tout le dossier pour tout remplacer — l'historique est conservé automatiquement.",
     "foot.privacy":"Fonctionne entièrement dans votre navigateur et communique directement avec GitHub. Vos fichiers ne sont envoyés nulle part ailleurs.",
@@ -383,6 +390,10 @@ const DICT = {
     "log.pagesOn":"Pages activé",
     "log.pagesAlready":"Pages déjà actif — le site sera reconstruit",
     "log.pagesVerify":"Publié (vérifiez Pages dans les Paramètres du dépôt)",
+    "log.waiting":"En attente de la publication par GitHub (~1 min)",
+    "log.waitingN":"En attente de la publication par GitHub… {s} s",
+    "log.waitOk":"Publié — votre site est prêt",
+    "log.waitSlow":"Publication en cours — votre lien fonctionnera sous peu",
     "err.token401":"Jeton refusé — vérifiez qu'il est valide et non expiré.",
     "err.ghstatus":"GitHub a répondu : {status}",
     "err.createRepo":"Impossible de créer le dépôt ({status}). Le jeton manque peut-être d'Administration : écriture.",
@@ -666,9 +677,26 @@ $("publishBtn").onclick=async()=>{
     }else if(has.ok){setOk(sPages,t("log.pagesAlready"));}
     else{setOk(sPages,t("log.pagesVerify"));}
 
+    /* 7. wait until GitHub has actually published, so the link works on the first click */
+    const sWait=logStep(t("log.waiting"));setRun(sWait);
+    let built=false;
+    for(let i=0;i<30;i++){
+      await sleep(5000);
+      try{
+        const b=await gh(`/repos/${owner}/${repo}/pages/builds/latest`);
+        if(b.ok&&(await b.json()).status==="built"){built=true;break;}
+      }catch(e){}
+      sWait.querySelector(".tx").textContent=t("log.waitingN",{s:(i+1)*5});
+    }
+    setOk(sWait,built?t("log.waitOk"):t("log.waitSlow"));
+
     const isUser=repo.toLowerCase()===(owner.toLowerCase()+".github.io");
     const url=isUser?`https://${owner.toLowerCase()}.github.io/`:`https://${owner.toLowerCase()}.github.io/${repo}/`;
-    $("liveUrl").href=url;$("liveUrl").textContent=url;
+    // cache-buster on the href dodges any 404 a user may have cached by peeking early; the visible text stays clean
+    $("liveUrl").href=url+"?v="+Date.now();$("liveUrl").textContent=url;
+    const wb=$("resultWait");
+    wb.innerHTML=built?t("result.ready"):t("result.wait");
+    wb.classList.toggle("ready",built);
     $("result").className="result show";
     $("step3").classList.add("done");
   }catch(e){
