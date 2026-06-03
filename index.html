@@ -202,7 +202,8 @@
         <div class="step-head"><div class="num" id="num2">2</div><div class="step-title" data-i18n="s2.title">Name the site and add your files</div></div>
         <label class="fld" data-i18n="s2.repoLabel">Repository name</label>
         <div class="row">
-          <input id="repo" type="text" data-i18n-ph="s2.repoPh" placeholder="connect first to auto-fill" spellcheck="false">
+          <input id="repo" type="text" list="repoList" data-i18n-ph="s2.repoPh" placeholder="connect first to auto-fill" spellcheck="false" autocomplete="off">
+          <datalist id="repoList"></datalist>
         </div>
         <p class="help" data-i18n-html="s2.repoHelp">Use <b>yourname.github.io</b> for your main site, or any name for a project site (served under <code>/that-name/</code>).</p>
 
@@ -275,7 +276,7 @@ const DICT = {
     "s2.title":"Name the site and add your files",
     "s2.repoLabel":"Repository name",
     "s2.repoPh":"connect first to auto-fill",
-    "s2.repoHelp":'Use <b>yourname.github.io</b> for your main site, or any name for a project site (served under <code>/that-name/</code>).',
+    "s2.repoHelp":'Click the field to pick an existing repository, or type a new name. Use <b>yourname.github.io</b> for your main site, or any name for a project site (served under <code>/that-name/</code>).',
     "s2.drop":"Drop your site folder or files here",
     "s2.dropSmall":"index.html should be at the top level",
     "s2.or":"— or —",
@@ -351,7 +352,7 @@ const DICT = {
     "s2.title":"Nommez le site et ajoutez vos fichiers",
     "s2.repoLabel":"Nom du dépôt",
     "s2.repoPh":"connectez-vous pour le remplir automatiquement",
-    "s2.repoHelp":'Utilisez <b>votrenom.github.io</b> pour votre site principal, ou tout autre nom pour un site de projet (servi sous <code>/ce-nom/</code>).',
+    "s2.repoHelp":'Cliquez dans le champ pour choisir un dépôt existant, ou saisissez un nouveau nom. Utilisez <b>votrenom.github.io</b> pour votre site principal, ou tout autre nom pour un site de projet (servi sous <code>/ce-nom/</code>).',
     "s2.drop":"Déposez votre dossier ou vos fichiers ici",
     "s2.dropSmall":"index.html doit être à la racine",
     "s2.or":"— ou —",
@@ -480,6 +481,20 @@ async function connectWithToken(tok){
   $("step1").classList.add("done");
   if(!$("repo").value.trim())$("repo").value=u.login.toLowerCase()+".github.io";
   refreshPublish();
+  loadRepos(); // populate the repo dropdown with the user's existing repositories
+}
+
+/* fetch the user's repos so the Repository name field offers a pick-list (Pages sites first) */
+async function loadRepos(){
+  try{
+    const r=await gh("/user/repos?per_page=100&affiliation=owner&sort=pushed");
+    if(!r.ok)return;
+    const repos=await r.json();
+    repos.sort((a,b)=>(b.has_pages?1:0)-(a.has_pages?1:0)); // Pages-enabled repos to the top (stable keeps recent order)
+    $("repoList").innerHTML=repos.map(rp=>
+      `<option value="${esc(rp.name)}"${rp.has_pages?` label="${state.lang==="fr"?"site GitHub Pages":"GitHub Pages site"}"`:""}></option>`
+    ).join("");
+  }catch(e){/* non-fatal: the field still accepts free text */}
 }
 
 $("connectBtn").onclick=async()=>{
