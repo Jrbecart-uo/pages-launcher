@@ -1,0 +1,13 @@
+name = "pages-launcher-oauth"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# Public, safe to commit. Set to your GitHub OAuth App's Client ID.
+[vars]
+GITHUB_CLIENT_ID = "REPLACE_WITH_CLIENT_ID"
+# Comma-separated allowlist of the page origin(s) that may call this worker.
+# e.g. "https://jrbecart-uo.github.io" (and "http://localhost:8000" while testing)
+ALLOWED_ORIGINS = "https://jrbecart-uo.github.io"
+
+# DO NOT put the client secret here. Set it as an encrypted secret instead:
+#   npx wrangler secret put GITHUB_CLIENT_SECRET

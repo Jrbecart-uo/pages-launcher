@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pages Launcher · uOttawa Faculty of Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,500;0,600;0,700;0,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* uOttawa brand palette */
+    --garnet:#8b1d41;
+    --garnet-deep:#6e1733;
+    --garnet-soft:rgba(139,29,65,.08);
+    --grey:#2a2a2a;
+    --ink:#212121;
+    --paper:#f4f4f5;
+    --surface:#ffffff;
+    --surface-2:#f7f7f8;
+    --line:#e2e2e5;
+    --line-soft:#ededf0;
+    --mut:#6b6b70;
+    --ok:#2f7d4f;
+    --ok-soft:rgba(47,125,79,.10);
+    --err:#b42318;
+    --body:"Mulish",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:var(--body);color:var(--ink);background:var(--paper);
+    min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;
+  }
+
+  /* ---- top brand bar ---- */
+  .bar{background:var(--garnet);color:#fff}
+  .bar-in{max-width:920px;margin:0 auto;padding:14px clamp(16px,4vw,32px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .lockup{display:flex;align-items:center;gap:14px;min-width:0}
+  .wordmark{font-weight:800;font-size:24px;letter-spacing:-.02em;line-height:1;white-space:nowrap}
+  .wordmark .u{opacity:.85}
+  .divider{width:1px;height:30px;background:rgba(255,255,255,.35);flex:0 0 auto}
+  .faculty{font-size:13.5px;font-weight:600;line-height:1.25;opacity:.95}
+  .lang{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.14);border-radius:999px;padding:3px}
+  .lang button{font-family:var(--mono);font-size:12px;font-weight:600;color:#fff;background:transparent;border:none;border-radius:999px;padding:5px 11px;cursor:pointer;opacity:.7}
+  .lang button.on{background:#fff;color:var(--garnet);opacity:1}
+
+  .wrap{max-width:920px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,32px) 48px}
+
+  .intro{margin:6px 0 26px}
+  .intro h1{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:-.02em;margin:0 0 8px;line-height:1.1}
+  .intro p{margin:0;color:var(--mut);font-size:15.5px;max-width:62ch}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.05)}
+  .step{border-top:1px solid var(--line-soft);padding:24px clamp(18px,3vw,30px)}
+  .step:first-child{border-top:none}
+  .step-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .num{width:28px;height:28px;border-radius:50%;flex:0 0 auto;border:1.5px solid var(--garnet);color:var(--garnet);display:grid;place-items:center;font-family:var(--mono);font-size:13px;font-weight:600;background:#fff}
+  .step.done .num{background:var(--ok);border-color:var(--ok);color:#fff}
+  .step-title{font-weight:700;font-size:18px;letter-spacing:-.01em}
+  .indent{margin-left:40px}
+  .hint{color:var(--mut);font-size:14px;margin:0 0 16px 40px}
+
+  label.fld{display:block;margin:0 0 8px 40px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+  .row{display:flex;gap:10px;margin:0 0 0 40px;flex-wrap:wrap;align-items:center}
+  input[type=text],input[type=password]{
+    font-family:var(--mono);font-size:14px;color:var(--ink);background:var(--surface);
+    border:1.5px solid var(--line);border-radius:9px;padding:11px 13px;flex:1 1 220px;min-width:0;outline:none;
+  }
+  input:focus{border-color:var(--garnet)}
+
+  .btn{font-family:var(--body);font-weight:700;font-size:14px;background:var(--garnet);color:#fff;border:1.5px solid var(--garnet);padding:11px 18px;border-radius:9px;cursor:pointer;transition:background .12s,border-color .12s,opacity .12s;display:inline-flex;align-items:center;gap:9px;justify-content:center}
+  .btn:hover:not(:disabled){background:var(--garnet-deep);border-color:var(--garnet-deep)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+  .btn.ghost:hover{background:var(--surface-2);border-color:var(--garnet)}
+  .btn.big{width:calc(100% - 40px);margin-left:40px;padding:14px;font-size:15.5px}
+  .btn svg{width:18px;height:18px;flex:0 0 auto}
+
+  .signin-wrap{margin-left:40px}
+  .adv-toggle{display:inline-block;margin:14px 0 0 40px;font-family:var(--mono);font-size:12px;color:var(--garnet);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  .adv{display:none}
+  .adv.show{display:block;margin-top:8px}
+  .help{font-size:12.5px;color:var(--mut);margin:10px 40px 0}
+  .help a{color:var(--garnet)}
+  .help b{color:var(--ink)}
+
+  .who{display:flex;align-items:center;gap:11px;margin-left:40px;font-size:14.5px;flex-wrap:wrap}
+  .who img{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line)}
+  .who b{font-weight:700}
+  .pill{font-family:var(--mono);font-size:11px;background:var(--ok-soft);color:var(--ok);border-radius:999px;padding:3px 9px}
+
+  .drop{margin:16px 0 0 40px;border:2px dashed var(--line);border-radius:12px;padding:26px 18px;text-align:center;background:var(--surface-2);transition:border-color .15s,background .15s;cursor:pointer}
+  .drop.hot{border-color:var(--garnet);background:var(--garnet-soft)}
+  .drop .big-txt{font-weight:700;font-size:16px}
+  .drop .small-txt{color:var(--mut);font-size:13px;margin-top:4px}
+  .drop .or{font-family:var(--mono);font-size:11px;color:var(--mut);margin:12px 0 10px}
+  .drop .btn{margin:0 4px}
+
+  .files{margin:14px 0 0 40px;border:1px solid var(--line);border-radius:10px;overflow:hidden;display:none}
+  .files.show{display:block}
+  .frow{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:12.5px}
+  .frow:first-child{border-top:none}
+  .frow .p{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .frow .sz{color:var(--mut)}
+  .frow .x{cursor:pointer;color:var(--err);border:none;background:none;font-size:15px;line-height:1;padding:2px 4px}
+  .files-foot{padding:9px 12px;font-family:var(--mono);font-size:11.5px;color:var(--mut);background:var(--surface-2);border-top:1px solid var(--line-soft)}
+
+  .mode{display:flex;gap:8px;margin:16px 0 0 40px;flex-wrap:wrap}
+  .mode button{font-family:var(--body);font-weight:600;font-size:13px;padding:9px 14px;border-radius:9px;cursor:pointer;border:1.5px solid var(--line);background:#fff;color:var(--mut)}
+  .mode button.on{border-color:var(--garnet);background:var(--garnet);color:#fff}
+  .mode-note{font-size:12.5px;color:var(--mut);margin:9px 0 0 40px}
+
+  .log{margin:18px 0 0 40px;font-family:var(--mono);font-size:12.5px;display:none;flex-direction:column;gap:7px}
+  .log.show{display:flex}
+  .logline{display:flex;align-items:flex-start;gap:9px}
+  .logline .ic{width:16px;flex:0 0 auto;text-align:center}
+  .logline.pending{color:var(--mut)}
+  .logline.run .ic{animation:spin 1s linear infinite;display:inline-block}
+  .logline.ok .ic{color:var(--ok)}
+  .logline.bad{color:var(--err)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .result{margin:18px 40px 0;border:1.5px solid var(--ok);border-radius:12px;padding:18px;background:var(--ok-soft);display:none}
+  .result.show{display:block}
+  .result .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ok)}
+  .result a{font-weight:800;font-size:19px;color:var(--ink);word-break:break-all;text-decoration:none;border-bottom:3px solid var(--garnet)}
+  .result .note{font-size:12.5px;color:var(--mut);margin-top:8px}
+
+  .notice{margin:0 0 18px;border:1px solid var(--line);border-left:4px solid var(--garnet);background:var(--surface);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--mut);display:none}
+  .notice.show{display:block}
+  .notice b{color:var(--ink)}
+
+  footer.foot{margin-top:22px;font-size:12.5px;color:var(--mut);line-height:1.7}
+  footer.foot b{color:var(--ink)}
+  .foot-row{margin-top:4px}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <div class="bar-in">
+      <div class="lockup">
+        <div class="wordmark"><span class="u">u</span>Ottawa</div>
+        <div class="divider"></div>
+        <div class="faculty" data-i18n="faculty">Faculty of Science</div>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button id="langEn" class="on" onclick="setLang('en')">EN</button>
+        <button id="langFr" onclick="setLang('fr')">FR</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="intro">
+      <h1 data-i18n="title">Pages Launcher</h1>
+      <p data-i18n="tagline">Publish a static website to GitHub Pages — no command line, no Git.</p>
+    </div>
+
+    <div class="notice" id="demoNotice"></div>
+
+    <div class="card">
+      <!-- STEP 1 -->
+      <section class="step" id="step1">
+        <div class="step-head"><div class="num" id="num1">1</div><div class="step-title" data-i18n="s1.title">Connect your GitHub account</div></div>
+        <p class="hint" data-i18n="s1.hint">Sign in once so Pages Launcher can create the repository and upload your files for you.</p>
+
+        <div id="connectArea">
+          <div class="signin-wrap">
+            <button class="btn" id="signinBtn">
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+              <span data-i18n="s1.signin">Sign in with GitHub</span>
+            </button>
+            <button class="adv-toggle" id="advToggle" data-i18n="s1.advanced">Advanced: use a personal access token instead</button>
+            <div class="adv" id="advArea">
+              <label class="fld" data-i18n="s1.tokenLabel">Personal access token</label>
+              <div class="row">
+                <input id="token" type="password" placeholder="github_pat_…  /  ghp_…" autocomplete="off" spellcheck="false">
+                <button class="btn ghost" id="connectBtn" data-i18n="s1.connect">Connect</button>
+              </div>
+              <p class="help" data-i18n-html="s1.tokenHelp">Create one at <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com → fine-grained tokens</a> with <b>Contents</b>, <b>Pages</b> and <b>Administration</b> set to <b>Read &amp; write</b>. It stays in this browser tab only.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="connectedArea" style="display:none">
+          <div class="who">
+            <img id="avatar" alt="">
+            <div><span data-i18n="s1.connectedAs">Connected as</span> <b id="login"></b></div>
+            <span class="pill" data-i18n="s1.ready">ready</span>
+            <button class="btn ghost" id="disconnectBtn" style="font-size:12px;padding:6px 11px" data-i18n="s1.switch">switch</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="step" id="step2">
+        <div class="step-head"><div class="num" id="num2">2</div><div class="step-title" data-i18n="s2.title">Name the site and add your files</div></div>
+        <label class="fld" data-i18n="s2.repoLabel">Repository name</label>
+        <div class="row">
+          <input id="repo" type="text" data-i18n-ph="s2.repoPh" placeholder="connect first to auto-fill" spellcheck="false">
+        </div>
+        <p class="help" data-i18n-html="s2.repoHelp">Use <b>yourname.github.io</b> for your main site, or any name for a project site (served under <code>/that-name/</code>).</p>
+
+        <div class="drop" id="drop">
+          <div class="big-txt" data-i18n="s2.drop">Drop your site folder or files here</div>
+          <div class="small-txt" data-i18n="s2.dropSmall">index.html should be at the top level</div>
+          <div class="or" data-i18n="s2.or">— or —</div>
+          <button class="btn ghost" id="pickFolder" style="font-size:13px" data-i18n="s2.chooseFolder">Choose folder</button>
+          <button class="btn ghost" id="pickFiles" style="font-size:13px" data-i18n="s2.chooseFiles">Choose files</button>
+          <input id="folderInput" type="file" webkitdirectory directory multiple hidden>
+          <input id="filesInput" type="file" multiple hidden>
+        </div>
+
+        <div class="files" id="fileList"></div>
+
+        <div class="mode" id="mode">
+          <button data-mode="update" class="on" data-i18n="mode.update">Add / update files</button>
+          <button data-mode="replace" data-i18n="mode.replace">Replace entire site</button>
+        </div>
+        <p class="mode-note" id="modeNote" data-i18n="mode.updateNote">Keeps existing files and overwrites ones with the same path. Best for editing a page or two.</p>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="step" id="step3">
+        <div class="step-head"><div class="num" id="num3">3</div><div class="step-title" data-i18n="s3.title">Publish</div></div>
+        <p class="hint" data-i18n="s3.hint">One click creates the repository (if needed), commits your files, and turns on GitHub Pages.</p>
+        <button class="btn big" id="publishBtn" disabled data-i18n="s3.button">Publish to GitHub Pages</button>
+        <div class="log" id="log"></div>
+        <div class="result" id="result">
+          <div class="lbl" data-i18n="result.liveAt">Your site is live at</div>
+          <a id="liveUrl" target="_blank" rel="noopener"></a>
+          <div class="note" data-i18n="result.note">First build can take ~1 minute. To update later: come back, drop the changed file(s), Publish again.</div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="foot">
+      <div class="foot-row" data-i18n-html="foot.updates"><b>How updates work:</b> every Publish is one commit. Drop one file to change one page, or the whole folder to replace everything — history is kept automatically.</div>
+      <div class="foot-row" data-i18n="foot.privacy">Runs entirely in your browser and talks directly to GitHub. Your files are never sent anywhere else.</div>
+    </footer>
+  </div>
+
+<script>
+/* ============================================================
+   CONFIG — fill these after deploying the OAuth worker.
+   Leave githubClientId empty to run in token-only demo mode.
+   ============================================================ */
+const CONFIG = {
+  githubClientId: "",   // your GitHub OAuth App client ID (public, safe to commit)
+  oauthWorkerUrl: "",   // e.g. https://pages-launcher-oauth.<you>.workers.dev/exchange
+};
+
+/* ---------- i18n ---------- */
+const DICT = {
+  en:{
+    "faculty":"Faculty of Science",
+    "title":"Pages Launcher",
+    "tagline":"Publish a static website to GitHub Pages — no command line, no Git.",
+    "s1.title":"Connect your GitHub account",
+    "s1.hint":"Sign in once so Pages Launcher can create the repository and upload your files for you.",
+    "s1.signin":"Sign in with GitHub",
+    "s1.advanced":"Advanced: use a personal access token instead",
+    "s1.tokenLabel":"Personal access token",
+    "s1.tokenHelp":'Create one at <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com → fine-grained tokens</a> with <b>Contents</b>, <b>Pages</b> and <b>Administration</b> set to <b>Read &amp; write</b>. It stays in this browser tab only.',
+    "s1.connect":"Connect",
+    "s1.connectedAs":"Connected as",
+    "s1.ready":"ready",
+    "s1.switch":"switch",
+    "s2.title":"Name the site and add your files",
+    "s2.repoLabel":"Repository name",
+    "s2.repoPh":"connect first to auto-fill",
+    "s2.repoHelp":'Use <b>yourname.github.io</b> for your main site, or any name for a project site (served under <code>/that-name/</code>).',
+    "s2.drop":"Drop your site folder or files here",
+    "s2.dropSmall":"index.html should be at the top level",
+    "s2.or":"— or —",
+    "s2.chooseFolder":"Choose folder",
+    "s2.chooseFiles":"Choose files",
+    "mode.update":"Add / update files",
+    "mode.replace":"Replace entire site",
+    "mode.updateNote":"Keeps existing files and overwrites ones with the same path. Best for editing a page or two.",
+    "mode.replaceNote":"The files you add become the ENTIRE site. Anything not included is removed. Best for a full fresh upload.",
+    "s3.title":"Publish",
+    "s3.hint":"One click creates the repository (if needed), commits your files, and turns on GitHub Pages.",
+    "s3.button":"Publish to GitHub Pages",
+    "result.liveAt":"Your site is live at",
+    "result.note":"First build can take ~1 minute. To update later: come back, drop the changed file(s), Publish again.",
+    "foot.updates":"<b>How updates work:</b> every Publish is one commit. Drop one file to change one page, or the whole folder to replace everything — history is kept automatically.",
+    "foot.privacy":"Runs entirely in your browser and talks directly to GitHub. Your files are never sent anywhere else.",
+    "notice.demo":"<b>Demo mode.</b> Sign-in with GitHub is not configured yet, so use the <b>Advanced</b> token option below. Deploy the OAuth worker and fill in <code>CONFIG</code> to enable one-click sign-in.",
+    "filefoot":"{n} file(s) · {size}",
+    "filefoot.noindex":" · ⚠ no top-level index.html found",
+    /* log + errors */
+    "log.checking":"Checking repository {repo}",
+    "log.notfound":"Repository not found — creating it",
+    "log.creating":"Creating {repo} (public)",
+    "log.found":"Repository found ({repo})",
+    "log.reading":"Reading current branch ({branch})",
+    "log.oncommit":"On commit {sha}",
+    "log.empty":"Empty repository — first commit",
+    "log.uploading":"Uploading {n} file(s)",
+    "log.uploadingOne":"Uploading file(s)  {i}/{n} — {path}",
+    "log.uploaded":"Uploaded {n} file(s)",
+    "log.treeUpdate":"Building site tree (add/update)",
+    "log.treeReplace":"Building site tree (replace)",
+    "log.committing":"Committing",
+    "log.committed":"Committed {sha}",
+    "log.pages":"Turning on GitHub Pages",
+    "log.pagesOn":"Pages enabled",
+    "log.pagesAlready":"Pages already on — site will rebuild",
+    "log.pagesVerify":"Pushed (verify Pages in repository Settings)",
+    "err.token401":"Token rejected — check it is valid and unexpired.",
+    "err.ghstatus":"GitHub responded with {status}",
+    "err.createRepo":"Could not create the repository ({status}). The token may lack Administration: write.",
+    "err.repoLookup":"Repository lookup failed ({status}).",
+    "err.upload":"Upload failed for {path} ({status})",
+    "err.tree":"Could not build the file tree ({status})",
+    "err.commit":"Commit failed ({status})",
+    "err.moveBranch":"Could not move the branch ({status})",
+    "err.makeBranch":"Could not create the branch ({status})",
+    "err.pages":"Enabling Pages failed ({status}). Check Pages: write on the token.",
+    "err.oauthState":"Sign-in could not be verified (state mismatch). Please try again.",
+    "err.oauthExchange":"Could not complete sign-in: {msg}",
+  },
+  fr:{
+    "faculty":"Faculté des sciences",
+    "title":"Lanceur de pages",
+    "tagline":"Publiez un site Web statique sur GitHub Pages — sans ligne de commande, sans Git.",
+    "s1.title":"Connectez votre compte GitHub",
+    "s1.hint":"Connectez-vous une seule fois pour que le Lanceur de pages crée le dépôt et téléverse vos fichiers à votre place.",
+    "s1.signin":"Se connecter avec GitHub",
+    "s1.advanced":"Avancé : utiliser un jeton d'accès personnel",
+    "s1.tokenLabel":"Jeton d'accès personnel",
+    "s1.tokenHelp":'Créez-en un sur <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com → jetons à granularité fine</a> avec <b>Contents</b>, <b>Pages</b> et <b>Administration</b> en <b>Lecture et écriture</b>. Il reste uniquement dans cet onglet.',
+    "s1.connect":"Connecter",
+    "s1.connectedAs":"Connecté en tant que",
+    "s1.ready":"prêt",
+    "s1.switch":"changer",
+    "s2.title":"Nommez le site et ajoutez vos fichiers",
+    "s2.repoLabel":"Nom du dépôt",
+    "s2.repoPh":"connectez-vous pour le remplir automatiquement",
+    "s2.repoHelp":'Utilisez <b>votrenom.github.io</b> pour votre site principal, ou tout autre nom pour un site de projet (servi sous <code>/ce-nom/</code>).',
+    "s2.drop":"Déposez votre dossier ou vos fichiers ici",
+    "s2.dropSmall":"index.html doit être à la racine",
+    "s2.or":"— ou —",
+    "s2.chooseFolder":"Choisir un dossier",
+    "s2.chooseFiles":"Choisir des fichiers",
+    "mode.update":"Ajouter / mettre à jour",
+    "mode.replace":"Remplacer tout le site",
+    "mode.updateNote":"Conserve les fichiers existants et remplace ceux du même chemin. Idéal pour modifier une page ou deux.",
+    "mode.replaceNote":"Les fichiers ajoutés deviennent TOUT le site. Ce qui n'est pas inclus est supprimé. Idéal pour un téléversement complet.",
+    "s3.title":"Publier",
+    "s3.hint":"Un clic crée le dépôt (au besoin), enregistre vos fichiers et active GitHub Pages.",
+    "s3.button":"Publier sur GitHub Pages",
+    "result.liveAt":"Votre site est en ligne à",
+    "result.note":"La première construction peut prendre ~1 minute. Pour mettre à jour : revenez, déposez le ou les fichiers modifiés, puis publiez de nouveau.",
+    "foot.updates":"<b>Fonctionnement des mises à jour :</b> chaque publication est une validation (commit). Déposez un fichier pour changer une page, ou tout le dossier pour tout remplacer — l'historique est conservé automatiquement.",
+    "foot.privacy":"Fonctionne entièrement dans votre navigateur et communique directement avec GitHub. Vos fichiers ne sont envoyés nulle part ailleurs.",
+    "notice.demo":"<b>Mode démo.</b> La connexion avec GitHub n'est pas encore configurée ; utilisez l'option <b>Avancé</b> (jeton) ci-dessous. Déployez le worker OAuth et remplissez <code>CONFIG</code> pour activer la connexion en un clic.",
+    "filefoot":"{n} fichier(s) · {size}",
+    "filefoot.noindex":" · ⚠ aucun index.html à la racine",
+    "log.checking":"Vérification du dépôt {repo}",
+    "log.notfound":"Dépôt introuvable — création en cours",
+    "log.creating":"Création de {repo} (public)",
+    "log.found":"Dépôt trouvé ({repo})",
+    "log.reading":"Lecture de la branche actuelle ({branch})",
+    "log.oncommit":"Sur la validation {sha}",
+    "log.empty":"Dépôt vide — première validation",
+    "log.uploading":"Téléversement de {n} fichier(s)",
+    "log.uploadingOne":"Téléversement  {i}/{n} — {path}",
+    "log.uploaded":"{n} fichier(s) téléversé(s)",
+    "log.treeUpdate":"Construction de l'arbre (ajout/màj)",
+    "log.treeReplace":"Construction de l'arbre (remplacement)",
+    "log.committing":"Validation",
+    "log.committed":"Validé {sha}",
+    "log.pages":"Activation de GitHub Pages",
+    "log.pagesOn":"Pages activé",
+    "log.pagesAlready":"Pages déjà actif — le site sera reconstruit",
+    "log.pagesVerify":"Publié (vérifiez Pages dans les Paramètres du dépôt)",
+    "err.token401":"Jeton refusé — vérifiez qu'il est valide et non expiré.",
+    "err.ghstatus":"GitHub a répondu : {status}",
+    "err.createRepo":"Impossible de créer le dépôt ({status}). Le jeton manque peut-être d'Administration : écriture.",
+    "err.repoLookup":"Échec de la recherche du dépôt ({status}).",
+    "err.upload":"Échec du téléversement de {path} ({status})",
+    "err.tree":"Impossible de construire l'arbre des fichiers ({status})",
+    "err.commit":"Échec de la validation ({status})",
+    "err.moveBranch":"Impossible de déplacer la branche ({status})",
+    "err.makeBranch":"Impossible de créer la branche ({status})",
+    "err.pages":"Échec de l'activation de Pages ({status}). Vérifiez Pages : écriture sur le jeton.",
+    "err.oauthState":"La connexion n'a pas pu être vérifiée (état non concordant). Veuillez réessayer.",
+    "err.oauthExchange":"Connexion impossible : {msg}",
+  }
+};
+
+const state={token:null,login:null,defaultBranch:"main",files:[],mode:"update",lang:"en"};
+const $=id=>document.getElementById(id);
+
+function t(key,vars){
+  let s=(DICT[state.lang]&&DICT[state.lang][key])||DICT.en[key]||key;
+  if(vars)for(const k in vars)s=s.replace(new RegExp("\\{"+k+"\\}","g"),vars[k]);
+  return s;
+}
+function setLang(lang){
+  state.lang=DICT[lang]?lang:"en";
+  try{localStorage.setItem("pl_lang",state.lang);}catch(e){}
+  document.documentElement.lang=state.lang;
+  document.title="Pages Launcher · uOttawa "+(state.lang==="fr"?"Faculté des sciences":"Faculty of Science");
+  $("langEn").classList.toggle("on",state.lang==="en");
+  $("langFr").classList.toggle("on",state.lang==="fr");
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.getAttribute("data-i18n")));
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>el.innerHTML=t(el.getAttribute("data-i18n-html")));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.setAttribute("placeholder",t(el.getAttribute("data-i18n-ph"))));
+  // re-render dynamic bits in the new language
+  $("modeNote").textContent=t(state.mode==="update"?"mode.updateNote":"mode.replaceNote");
+  if(state.files.length)renderFiles();
+  if($("demoNotice").classList.contains("show"))$("demoNotice").innerHTML=t("notice.demo");
+}
+
+/* ---------- GitHub API helper ---------- */
+const API="https://api.github.com";
+const gh=(path,opts={})=>fetch(API+path,{...opts,headers:{
+  "Authorization":"Bearer "+state.token,
+  "Accept":"application/vnd.github+json",
+  "X-GitHub-Api-Version":"2022-11-28",
+  ...(opts.body?{"Content-Type":"application/json"}:{}),
+  ...(opts.headers||{})
+}});
+const fmtSize=b=>b<1024?b+" B":b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(1)+" MB";
+
+/* ---------- STEP 1: OAuth + token connect ---------- */
+function randState(){const a=new Uint8Array(16);crypto.getRandomValues(a);return [...a].map(x=>x.toString(16).padStart(2,"0")).join("");}
+
+$("signinBtn").onclick=()=>{
+  if(!CONFIG.githubClientId||!CONFIG.oauthWorkerUrl){
+    // not configured: nudge to the token path
+    $("advArea").classList.add("show");
+    $("token").focus();
+    return;
+  }
+  const st=randState();
+  try{sessionStorage.setItem("pl_oauth_state",st);sessionStorage.setItem("pl_lang",state.lang);}catch(e){}
+  const u=new URL("https://github.com/login/oauth/authorize");
+  u.searchParams.set("client_id",CONFIG.githubClientId);
+  u.searchParams.set("redirect_uri",location.origin+location.pathname);
+  u.searchParams.set("scope","repo");
+  u.searchParams.set("state",st);
+  location.href=u.toString();
+};
+
+$("advToggle").onclick=()=>$("advArea").classList.toggle("show");
+
+async function connectWithToken(tok){
+  state.token=tok;
+  const r=await gh("/user");
+  if(!r.ok)throw new Error(r.status===401?t("err.token401"):t("err.ghstatus",{status:r.status}));
+  const u=await r.json();
+  state.login=u.login;
+  $("avatar").src=u.avatar_url;$("login").textContent=u.login;
+  $("connectArea").style.display="none";
+  $("connectedArea").style.display="block";
+  $("step1").classList.add("done");
+  if(!$("repo").value.trim())$("repo").value=u.login.toLowerCase()+".github.io";
+  refreshPublish();
+}
+
+$("connectBtn").onclick=async()=>{
+  const tok=$("token").value.trim();
+  if(!tok){$("token").focus();return;}
+  $("connectBtn").disabled=true;const old=$("connectBtn").textContent;$("connectBtn").textContent="…";
+  try{await connectWithToken(tok);}
+  catch(e){state.token=null;alert(e.message);$("connectBtn").disabled=false;$("connectBtn").textContent=old;}
+};
+
+$("disconnectBtn").onclick=()=>{
+  state.token=null;state.login=null;
+  $("connectArea").style.display="block";$("connectedArea").style.display="none";
+  $("connectBtn").disabled=false;$("connectBtn").textContent=t("s1.connect");
+  $("step1").classList.remove("done");
+  refreshPublish();
+};
+
+/* exchange OAuth code via the worker on page load */
+async function handleOAuthReturn(){
+  const params=new URLSearchParams(location.search);
+  const code=params.get("code");
+  if(!code)return;
+  const retState=params.get("state");
+  let saved=null;try{saved=sessionStorage.getItem("pl_oauth_state");}catch(e){}
+  history.replaceState({},"",location.pathname); // clean the URL
+  if(!saved||saved!==retState){alert(t("err.oauthState"));return;}
+  try{
+    const r=await fetch(CONFIG.oauthWorkerUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code})});
+    const d=await r.json();
+    if(!d.access_token)throw new Error(d.error||"no token");
+    await connectWithToken(d.access_token);
+  }catch(e){alert(t("err.oauthExchange",{msg:e.message}));}
+}
+
+/* ---------- STEP 2: files ---------- */
+$("pickFolder").onclick=()=>$("folderInput").click();
+$("pickFiles").onclick=()=>$("filesInput").click();
+$("folderInput").onchange=e=>addFromInput(e.target.files,true);
+$("filesInput").onchange=e=>addFromInput(e.target.files,false);
+
+function addFromInput(fileList,isFolder){
+  for(const f of fileList){
+    let path=isFolder&&f.webkitRelativePath?f.webkitRelativePath:f.name;
+    if(isFolder)path=stripTop(path);
+    pushFile(path,f);
+  }
+  renderFiles();
+}
+function stripTop(p){const i=p.indexOf("/");return i>=0?p.slice(i+1):p;}
+function pushFile(path,file){
+  path=path.replace(/^\/+/,"");
+  if(!path)return;
+  const ix=state.files.findIndex(x=>x.path===path);
+  if(ix>=0)state.files[ix]={path,file};else state.files.push({path,file});
+}
+
+const drop=$("drop");
+["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("hot");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();if(ev==="dragleave"&&drop.contains(e.relatedTarget))return;drop.classList.remove("hot");}));
+drop.addEventListener("drop",async e=>{
+  e.preventDefault();drop.classList.remove("hot");
+  const items=e.dataTransfer.items;
+  if(items&&items.length&&items[0].webkitGetAsEntry){
+    const roots=[...items].map(i=>i.webkitGetAsEntry()).filter(Boolean);
+    for(const entry of roots)await walk(entry,"");
+  }else{
+    for(const f of e.dataTransfer.files)pushFile(f.name,f);
+  }
+  renderFiles();
+});
+function walk(entry,prefix){
+  return new Promise(res=>{
+    if(entry.isFile){entry.file(f=>{pushFile(prefix+entry.name,f);res();});}
+    else if(entry.isDirectory){
+      const rd=entry.createReader();const all=[];
+      const read=()=>rd.readEntries(async ents=>{
+        if(!ents.length){for(const c of all)await walk(c,prefix+entry.name+"/");res();}
+        else{all.push(...ents);read();}
+      });
+      read();
+    }else res();
+  });
+}
+
+function renderFiles(){
+  const box=$("fileList");
+  if(!state.files.length){box.className="files";box.innerHTML="";refreshPublish();return;}
+  box.className="files show";
+  let total=0;
+  const rows=state.files.map((f,i)=>{
+    total+=f.file.size;
+    return `<div class="frow"><span class="p">${esc(f.path)}</span><span class="sz">${fmtSize(f.file.size)}</span><button class="x" data-i="${i}" title="remove">✕</button></div>`;
+  }).join("");
+  const hasIndex=state.files.some(f=>f.path==="index.html");
+  box.innerHTML=rows+`<div class="files-foot">${t("filefoot",{n:state.files.length,size:fmtSize(total)})}${hasIndex?"":t("filefoot.noindex")}</div>`;
+  box.querySelectorAll(".x").forEach(b=>b.onclick=()=>{state.files.splice(+b.dataset.i,1);renderFiles();});
+  refreshPublish();
+}
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+$("mode").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  $("mode").querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");state.mode=b.dataset.mode;
+  $("modeNote").textContent=t(state.mode==="update"?"mode.updateNote":"mode.replaceNote");
+});
+
+$("repo").oninput=refreshPublish;
+function refreshPublish(){$("publishBtn").disabled=!(state.token&&state.files.length&&$("repo").value.trim());}
+
+/* ---------- STEP 3: publish ---------- */
+const logBox=$("log");
+function logStep(txt){const el=document.createElement("div");el.className="logline pending";el.innerHTML=`<span class="ic">○</span><span class="tx"></span>`;el.querySelector(".tx").textContent=txt;logBox.appendChild(el);return el;}
+function setRun(el){el.className="logline run";el.querySelector(".ic").textContent="⟳";}
+function setOk(el,tx){el.className="logline ok";el.querySelector(".ic").textContent="✓";if(tx)el.querySelector(".tx").textContent=tx;}
+function setBad(el,tx){el.className="logline bad";el.querySelector(".ic").textContent="✕";if(tx)el.querySelector(".tx").textContent=tx;}
+
+function readBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]||"");r.onerror=()=>rej(new Error("read failed"));r.readAsDataURL(file);});}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+$("publishBtn").onclick=async()=>{
+  const repo=$("repo").value.trim();
+  const owner=state.login;
+  const full=owner+"/"+repo;
+  $("publishBtn").disabled=true;
+  logBox.className="log show";logBox.innerHTML="";$("result").className="result";
+  const sRepo=logStep(t("log.checking",{repo:full}));
+  try{
+    setRun(sRepo);
+    let rr=await gh(`/repos/${owner}/${repo}`);
+    if(rr.status===404){
+      setOk(sRepo,t("log.notfound"));
+      const sCreate=logStep(t("log.creating",{repo}));setRun(sCreate);
+      const cr=await gh("/user/repos",{method:"POST",body:JSON.stringify({name:repo,auto_init:true,private:false,description:"Published with Pages Launcher"})});
+      if(!cr.ok)throw new Error(t("err.createRepo",{status:cr.status}));
+      state.defaultBranch=(await cr.json()).default_branch||"main";
+      setOk(sCreate);
+    }else if(rr.ok){
+      state.defaultBranch=(await rr.json()).default_branch||"main";
+      setOk(sRepo,t("log.found",{repo:full}));
+    }else{
+      throw new Error(t("err.repoLookup",{status:rr.status}));
+    }
+    const branch=state.defaultBranch;
+
+    const sBase=logStep(t("log.reading",{branch}));setRun(sBase);
+    let baseSha=null,baseTree=null;
+    for(let i=0;i<6;i++){
+      const ref=await gh(`/repos/${owner}/${repo}/git/ref/heads/${branch}`);
+      if(ref.ok){baseSha=(await ref.json()).object.sha;break;}
+      await sleep(800);
+    }
+    if(baseSha){baseTree=(await(await gh(`/repos/${owner}/${repo}/git/commits/${baseSha}`)).json()).tree.sha;}
+    setOk(sBase,baseSha?t("log.oncommit",{sha:baseSha.slice(0,7)}):t("log.empty"));
+
+    const sBlobs=logStep(t("log.uploading",{n:state.files.length}));setRun(sBlobs);
+    const tree=[];
+    for(let i=0;i<state.files.length;i++){
+      const f=state.files[i];
+      const content=await readBase64(f.file);
+      const bl=await gh(`/repos/${owner}/${repo}/git/blobs`,{method:"POST",body:JSON.stringify({content,encoding:"base64"})});
+      if(!bl.ok)throw new Error(t("err.upload",{path:f.path,status:bl.status}));
+      tree.push({path:f.path,mode:"100644",type:"blob",sha:(await bl.json()).sha});
+      sBlobs.querySelector(".tx").textContent=t("log.uploadingOne",{i:i+1,n:state.files.length,path:f.path});
+    }
+    setOk(sBlobs,t("log.uploaded",{n:state.files.length}));
+
+    const sTree=logStep(t(state.mode==="replace"?"log.treeReplace":"log.treeUpdate"));setRun(sTree);
+    const treeBody={tree};
+    if(state.mode==="update"&&baseTree)treeBody.base_tree=baseTree;
+    const tr=await gh(`/repos/${owner}/${repo}/git/trees`,{method:"POST",body:JSON.stringify(treeBody)});
+    if(!tr.ok)throw new Error(t("err.tree",{status:tr.status}));
+    const newTree=(await tr.json()).sha;
+    setOk(sTree);
+
+    const sCommit=logStep(t("log.committing"));setRun(sCommit);
+    const cmBody={message:`Publish via Pages Launcher — ${new Date().toISOString()}`,tree:newTree};
+    if(baseSha)cmBody.parents=[baseSha];
+    const cmRes=await gh(`/repos/${owner}/${repo}/git/commits`,{method:"POST",body:JSON.stringify(cmBody)});
+    if(!cmRes.ok)throw new Error(t("err.commit",{status:cmRes.status}));
+    const newCommit=(await cmRes.json()).sha;
+    if(baseSha){
+      const up=await gh(`/repos/${owner}/${repo}/git/refs/heads/${branch}`,{method:"PATCH",body:JSON.stringify({sha:newCommit,force:true})});
+      if(!up.ok)throw new Error(t("err.moveBranch",{status:up.status}));
+    }else{
+      const mk=await gh(`/repos/${owner}/${repo}/git/refs`,{method:"POST",body:JSON.stringify({ref:"refs/heads/"+branch,sha:newCommit})});
+      if(!mk.ok)throw new Error(t("err.makeBranch",{status:mk.status}));
+    }
+    setOk(sCommit,t("log.committed",{sha:newCommit.slice(0,7)}));
+
+    const sPages=logStep(t("log.pages"));setRun(sPages);
+    const has=await gh(`/repos/${owner}/${repo}/pages`);
+    if(has.status===404){
+      const en=await gh(`/repos/${owner}/${repo}/pages`,{method:"POST",body:JSON.stringify({source:{branch,path:"/"}})});
+      if(!en.ok&&en.status!==409)throw new Error(t("err.pages",{status:en.status}));
+      setOk(sPages,t("log.pagesOn"));
+    }else if(has.ok){setOk(sPages,t("log.pagesAlready"));}
+    else{setOk(sPages,t("log.pagesVerify"));}
+
+    const isUser=repo.toLowerCase()===(owner.toLowerCase()+".github.io");
+    const url=isUser?`https://${owner.toLowerCase()}.github.io/`:`https://${owner.toLowerCase()}.github.io/${repo}/`;
+    $("liveUrl").href=url;$("liveUrl").textContent=url;
+    $("result").className="result show";
+    $("step3").classList.add("done");
+  }catch(e){
+    const last=logBox.querySelector(".logline.run")||logBox.lastChild;
+    if(last)setBad(last,(last.querySelector(".tx").textContent||"")+" — "+e.message);
+    else setBad(logStep("Error"),e.message);
+  }finally{
+    $("publishBtn").disabled=false;
+  }
+};
+
+/* ---------- boot ---------- */
+(function init(){
+  // language: saved → oauth round-trip → browser → en
+  let lang=null;
+  try{lang=sessionStorage.getItem("pl_lang")||localStorage.getItem("pl_lang");}catch(e){}
+  if(!lang)lang=(navigator.language||"en").toLowerCase().startsWith("fr")?"fr":"en";
+  setLang(lang);
+
+  if(!CONFIG.githubClientId||!CONFIG.oauthWorkerUrl){
+    $("demoNotice").innerHTML=t("notice.demo");
+    $("demoNotice").classList.add("show");
+  }
+  handleOAuthReturn();
+})();
+</script>
+</body>
+</html>

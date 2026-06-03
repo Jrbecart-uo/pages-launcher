@@ -1,0 +1,8 @@
+# Windows/WSL NTFS alternate-data-stream artifacts
+*:Zone.Identifier
+*:sec.endpointdlp
+
+# Node / wrangler
+node_modules/
+.wrangler/
+.dev.vars
