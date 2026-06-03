@@ -325,6 +325,7 @@ const DICT = {
     "err.createRepo":"Could not create the repository ({status}). The token may lack Administration: write.",
     "err.repoLookup":"Repository lookup failed ({status}).",
     "err.upload":"Upload failed for {path} ({status})",
+    "err.readStale":"Couldn’t read “{path}” — it likely changed on disk after you added it. Drag the file in again, then Publish.",
     "err.tree":"Could not build the file tree ({status})",
     "err.commit":"Commit failed ({status})",
     "err.moveBranch":"Could not move the branch ({status})",
@@ -399,6 +400,7 @@ const DICT = {
     "err.createRepo":"Impossible de créer le dépôt ({status}). Le jeton manque peut-être d'Administration : écriture.",
     "err.repoLookup":"Échec de la recherche du dépôt ({status}).",
     "err.upload":"Échec du téléversement de {path} ({status})",
+    "err.readStale":"Impossible de lire « {path} » — le fichier a probablement changé sur le disque après son ajout. Déposez-le de nouveau, puis publiez.",
     "err.tree":"Impossible de construire l'arbre des fichiers ({status})",
     "err.commit":"Échec de la validation ({status})",
     "err.moveBranch":"Impossible de déplacer la branche ({status})",
@@ -637,7 +639,9 @@ $("publishBtn").onclick=async()=>{
     const tree=[];
     for(let i=0;i<state.files.length;i++){
       const f=state.files[i];
-      const content=await readBase64(f.file);
+      let content;
+      try{content=await readBase64(f.file);}
+      catch(e){throw new Error(t("err.readStale",{path:f.path}));}
       const bl=await gh(`/repos/${owner}/${repo}/git/blobs`,{method:"POST",body:JSON.stringify({content,encoding:"base64"})});
       if(!bl.ok)throw new Error(t("err.upload",{path:f.path,status:bl.status}));
       tree.push({path:f.path,mode:"100644",type:"blob",sha:(await bl.json()).sha});
