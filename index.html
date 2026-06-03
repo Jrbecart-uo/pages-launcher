@@ -158,7 +158,7 @@
   <div class="wrap">
     <div class="intro">
       <h1 data-i18n="title">Pages Launcher</h1>
-      <p data-i18n="tagline">Publish a static website to GitHub Pages — no command line, no Git.</p>
+      <p data-i18n="tagline">Publish a static website to GitHub Pages - no command line, no Git.</p>
     </div>
 
     <div class="notice" id="demoNotice"></div>
@@ -210,7 +210,7 @@
         <div class="drop" id="drop">
           <div class="big-txt" data-i18n="s2.drop">Drop your site folder or files here</div>
           <div class="small-txt" data-i18n="s2.dropSmall">index.html should be at the top level</div>
-          <div class="or" data-i18n="s2.or">— or —</div>
+          <div class="or" data-i18n="s2.or">- or -</div>
           <button class="btn ghost" id="pickFolder" style="font-size:13px" data-i18n="s2.chooseFolder">Choose folder</button>
           <button class="btn ghost" id="pickFiles" style="font-size:13px" data-i18n="s2.chooseFiles">Choose files</button>
           <input id="folderInput" type="file" webkitdirectory directory multiple hidden>
@@ -235,21 +235,21 @@
         <div class="result" id="result">
           <div class="lbl" data-i18n="result.liveAt">Your site is live at</div>
           <a id="liveUrl" target="_blank" rel="noopener"></a>
-          <div class="wait" id="resultWait" data-i18n-html="result.wait"><span class="clock">⏱️</span><span>Wait about 1 minute before opening the link — GitHub needs to publish your files first. A "404" right away is normal; it disappears once publishing finishes.</span></div>
+          <div class="wait" id="resultWait" data-i18n-html="result.wait"><span class="clock">⏱️</span><span>Wait about 1 minute before opening the link - GitHub needs to publish your files first. A "404" right away is normal; it disappears once publishing finishes.</span></div>
           <div class="note" data-i18n="result.note">To update later: come back, drop the changed file(s), and Publish again.</div>
         </div>
       </section>
     </div>
 
     <footer class="foot">
-      <div class="foot-row" data-i18n-html="foot.updates"><b>How updates work:</b> every Publish is one commit. Drop one file to change one page, or the whole folder to replace everything — history is kept automatically.</div>
+      <div class="foot-row" data-i18n-html="foot.updates"><b>How updates work:</b> every Publish is one commit. Drop one file to change one page, or the whole folder to replace everything - history is kept automatically.</div>
       <div class="foot-row" data-i18n="foot.privacy">Runs entirely in your browser and talks directly to GitHub. Your files are never sent anywhere else.</div>
     </footer>
   </div>
 
 <script>
 /* ============================================================
-   CONFIG — fill these after deploying the OAuth worker.
+   CONFIG - fill these after deploying the OAuth worker.
    Leave githubClientId empty to run in token-only demo mode.
    ============================================================ */
 const CONFIG = {
@@ -262,7 +262,7 @@ const DICT = {
   en:{
     "faculty":"Faculty of Science",
     "title":"Pages Launcher",
-    "tagline":"Publish a static website to GitHub Pages — no command line, no Git.",
+    "tagline":"Publish a static website to GitHub Pages - no command line, no Git.",
     "s1.title":"Connect your GitHub account",
     "s1.hint":"Sign in once so Pages Launcher can create the repository and upload your files for you.",
     "s1.signin":"Sign in with GitHub",
@@ -279,7 +279,7 @@ const DICT = {
     "s2.repoHelp":'Click the field to pick an existing repository, or type a new name. Use <b>yourname.github.io</b> for your main site, or any name for a project site (served under <code>/that-name/</code>).',
     "s2.drop":"Drop your site folder or files here",
     "s2.dropSmall":"index.html should be at the top level",
-    "s2.or":"— or —",
+    "s2.or":"- or -",
     "s2.chooseFolder":"Choose folder",
     "s2.chooseFiles":"Choose files",
     "mode.update":"Add / update files",
@@ -290,24 +290,24 @@ const DICT = {
     "s3.hint":"One click creates the repository (if needed), commits your files, and turns on GitHub Pages.",
     "s3.button":"Publish to GitHub Pages",
     "result.liveAt":"Your site is live at",
-    "result.wait":'<span class="clock">⏱️</span><span>Wait about <b>1 minute</b> before opening the link — GitHub needs to publish your files first. A “404” right away is normal; it disappears once publishing finishes.</span>',
-    "result.ready":'<span class="clock">✅</span><span><b>Published and ready.</b> Your site is live — click the link above to open it.</span>',
+    "result.wait":'<span class="clock">⏱️</span><span>Wait about <b>1 minute</b> before opening the link - GitHub needs to publish your files first. A “404” right away is normal; it disappears once publishing finishes.</span>',
+    "result.ready":'<span class="clock">✅</span><span><b>Published and ready.</b> Your site is live - click the link above to open it.</span>',
     "result.note":"To update later: come back, drop the changed file(s), and Publish again.",
-    "foot.updates":"<b>How updates work:</b> every Publish is one commit. Drop one file to change one page, or the whole folder to replace everything — history is kept automatically.",
+    "foot.updates":"<b>How updates work:</b> every Publish is one commit. Drop one file to change one page, or the whole folder to replace everything - history is kept automatically.",
     "foot.privacy":"Runs entirely in your browser and talks directly to GitHub. Your files are never sent anywhere else.",
     "notice.demo":"<b>Demo mode.</b> Sign-in with GitHub is not configured yet, so use the <b>Advanced</b> token option below. Deploy the OAuth worker and fill in <code>CONFIG</code> to enable one-click sign-in.",
     "filefoot":"{n} file(s) · {size}",
     "filefoot.noindex":" · ⚠ no top-level index.html found",
     /* log + errors */
     "log.checking":"Checking repository {repo}",
-    "log.notfound":"Repository not found — creating it",
+    "log.notfound":"Repository not found - creating it",
     "log.creating":"Creating {repo} (public)",
     "log.found":"Repository found ({repo})",
     "log.reading":"Reading current branch ({branch})",
     "log.oncommit":"On commit {sha}",
-    "log.empty":"Empty repository — first commit",
+    "log.empty":"Empty repository - first commit",
     "log.uploading":"Uploading {n} file(s)",
-    "log.uploadingOne":"Uploading file(s)  {i}/{n} — {path}",
+    "log.uploadingOne":"Uploading file(s)  {i}/{n} - {path}",
     "log.uploaded":"Uploaded {n} file(s)",
     "log.treeUpdate":"Building site tree (add/update)",
     "log.treeReplace":"Building site tree (replace)",
@@ -315,18 +315,18 @@ const DICT = {
     "log.committed":"Committed {sha}",
     "log.pages":"Turning on GitHub Pages",
     "log.pagesOn":"Pages enabled",
-    "log.pagesAlready":"Pages already on — site will rebuild",
+    "log.pagesAlready":"Pages already on - site will rebuild",
     "log.pagesVerify":"Pushed (verify Pages in repository Settings)",
     "log.waiting":"Waiting for GitHub to publish your site (~1 min)",
     "log.waitingN":"Waiting for GitHub to publish your site… {s}s",
-    "log.waitOk":"Published — your site is ready",
-    "log.waitSlow":"Still publishing — your link will work shortly",
-    "err.token401":"Token rejected — check it is valid and unexpired.",
+    "log.waitOk":"Published - your site is ready",
+    "log.waitSlow":"Still publishing - your link will work shortly",
+    "err.token401":"Token rejected - check it is valid and unexpired.",
     "err.ghstatus":"GitHub responded with {status}",
     "err.createRepo":"Could not create the repository ({status}). The token may lack Administration: write.",
     "err.repoLookup":"Repository lookup failed ({status}).",
     "err.upload":"Upload failed for {path} ({status})",
-    "err.readStale":"Couldn’t read “{path}” — it likely changed on disk after you added it. Drag the file in again, then Publish.",
+    "err.readStale":"Couldn’t read “{path}” - it likely changed on disk after you added it. Drag the file in again, then Publish.",
     "err.tree":"Could not build the file tree ({status})",
     "err.commit":"Commit failed ({status})",
     "err.moveBranch":"Could not move the branch ({status})",
@@ -338,7 +338,7 @@ const DICT = {
   fr:{
     "faculty":"Faculté des sciences",
     "title":"Lanceur de pages",
-    "tagline":"Publiez un site Web statique sur GitHub Pages — sans ligne de commande, sans Git.",
+    "tagline":"Publiez un site Web statique sur GitHub Pages - sans ligne de commande, sans Git.",
     "s1.title":"Connectez votre compte GitHub",
     "s1.hint":"Connectez-vous une seule fois pour que le Lanceur de pages crée le dépôt et téléverse vos fichiers à votre place.",
     "s1.signin":"Se connecter avec GitHub",
@@ -355,7 +355,7 @@ const DICT = {
     "s2.repoHelp":'Cliquez dans le champ pour choisir un dépôt existant, ou saisissez un nouveau nom. Utilisez <b>votrenom.github.io</b> pour votre site principal, ou tout autre nom pour un site de projet (servi sous <code>/ce-nom/</code>).',
     "s2.drop":"Déposez votre dossier ou vos fichiers ici",
     "s2.dropSmall":"index.html doit être à la racine",
-    "s2.or":"— ou —",
+    "s2.or":"- ou -",
     "s2.chooseFolder":"Choisir un dossier",
     "s2.chooseFiles":"Choisir des fichiers",
     "mode.update":"Ajouter / mettre à jour",
@@ -366,23 +366,23 @@ const DICT = {
     "s3.hint":"Un clic crée le dépôt (au besoin), enregistre vos fichiers et active GitHub Pages.",
     "s3.button":"Publier sur GitHub Pages",
     "result.liveAt":"Votre site est en ligne à",
-    "result.wait":'<span class="clock">⏱️</span><span>Attendez environ <b>1 minute</b> avant d’ouvrir le lien — GitHub doit d’abord publier vos fichiers. Une erreur « 404 » au début est normale ; elle disparaît une fois la publication terminée.</span>',
-    "result.ready":'<span class="clock">✅</span><span><b>Publié et prêt.</b> Votre site est en ligne — cliquez sur le lien ci-dessus pour l’ouvrir.</span>',
+    "result.wait":'<span class="clock">⏱️</span><span>Attendez environ <b>1 minute</b> avant d’ouvrir le lien - GitHub doit d’abord publier vos fichiers. Une erreur « 404 » au début est normale ; elle disparaît une fois la publication terminée.</span>',
+    "result.ready":'<span class="clock">✅</span><span><b>Publié et prêt.</b> Votre site est en ligne - cliquez sur le lien ci-dessus pour l’ouvrir.</span>',
     "result.note":"Pour mettre à jour : revenez, déposez le ou les fichiers modifiés, puis publiez de nouveau.",
-    "foot.updates":"<b>Fonctionnement des mises à jour :</b> chaque publication est une validation (commit). Déposez un fichier pour changer une page, ou tout le dossier pour tout remplacer — l'historique est conservé automatiquement.",
+    "foot.updates":"<b>Fonctionnement des mises à jour :</b> chaque publication est une validation (commit). Déposez un fichier pour changer une page, ou tout le dossier pour tout remplacer - l'historique est conservé automatiquement.",
     "foot.privacy":"Fonctionne entièrement dans votre navigateur et communique directement avec GitHub. Vos fichiers ne sont envoyés nulle part ailleurs.",
     "notice.demo":"<b>Mode démo.</b> La connexion avec GitHub n'est pas encore configurée ; utilisez l'option <b>Avancé</b> (jeton) ci-dessous. Déployez le worker OAuth et remplissez <code>CONFIG</code> pour activer la connexion en un clic.",
     "filefoot":"{n} fichier(s) · {size}",
     "filefoot.noindex":" · ⚠ aucun index.html à la racine",
     "log.checking":"Vérification du dépôt {repo}",
-    "log.notfound":"Dépôt introuvable — création en cours",
+    "log.notfound":"Dépôt introuvable - création en cours",
     "log.creating":"Création de {repo} (public)",
     "log.found":"Dépôt trouvé ({repo})",
     "log.reading":"Lecture de la branche actuelle ({branch})",
     "log.oncommit":"Sur la validation {sha}",
-    "log.empty":"Dépôt vide — première validation",
+    "log.empty":"Dépôt vide - première validation",
     "log.uploading":"Téléversement de {n} fichier(s)",
-    "log.uploadingOne":"Téléversement  {i}/{n} — {path}",
+    "log.uploadingOne":"Téléversement  {i}/{n} - {path}",
     "log.uploaded":"{n} fichier(s) téléversé(s)",
     "log.treeUpdate":"Construction de l'arbre (ajout/màj)",
     "log.treeReplace":"Construction de l'arbre (remplacement)",
@@ -390,18 +390,18 @@ const DICT = {
     "log.committed":"Validé {sha}",
     "log.pages":"Activation de GitHub Pages",
     "log.pagesOn":"Pages activé",
-    "log.pagesAlready":"Pages déjà actif — le site sera reconstruit",
+    "log.pagesAlready":"Pages déjà actif - le site sera reconstruit",
     "log.pagesVerify":"Publié (vérifiez Pages dans les Paramètres du dépôt)",
     "log.waiting":"En attente de la publication par GitHub (~1 min)",
     "log.waitingN":"En attente de la publication par GitHub… {s} s",
-    "log.waitOk":"Publié — votre site est prêt",
-    "log.waitSlow":"Publication en cours — votre lien fonctionnera sous peu",
-    "err.token401":"Jeton refusé — vérifiez qu'il est valide et non expiré.",
+    "log.waitOk":"Publié - votre site est prêt",
+    "log.waitSlow":"Publication en cours - votre lien fonctionnera sous peu",
+    "err.token401":"Jeton refusé - vérifiez qu'il est valide et non expiré.",
     "err.ghstatus":"GitHub a répondu : {status}",
     "err.createRepo":"Impossible de créer le dépôt ({status}). Le jeton manque peut-être d'Administration : écriture.",
     "err.repoLookup":"Échec de la recherche du dépôt ({status}).",
     "err.upload":"Échec du téléversement de {path} ({status})",
-    "err.readStale":"Impossible de lire « {path} » — le fichier a probablement changé sur le disque après son ajout. Déposez-le de nouveau, puis publiez.",
+    "err.readStale":"Impossible de lire « {path} » - le fichier a probablement changé sur le disque après son ajout. Déposez-le de nouveau, puis publiez.",
     "err.tree":"Impossible de construire l'arbre des fichiers ({status})",
     "err.commit":"Échec de la validation ({status})",
     "err.moveBranch":"Impossible de déplacer la branche ({status})",
@@ -673,7 +673,7 @@ $("publishBtn").onclick=async()=>{
     setOk(sTree);
 
     const sCommit=logStep(t("log.committing"));setRun(sCommit);
-    const cmBody={message:`Publish via Pages Launcher — ${new Date().toISOString()}`,tree:newTree};
+    const cmBody={message:`Publish via Pages Launcher - ${new Date().toISOString()}`,tree:newTree};
     if(baseSha)cmBody.parents=[baseSha];
     const cmRes=await gh(`/repos/${owner}/${repo}/git/commits`,{method:"POST",body:JSON.stringify(cmBody)});
     if(!cmRes.ok)throw new Error(t("err.commit",{status:cmRes.status}));
@@ -720,7 +720,7 @@ $("publishBtn").onclick=async()=>{
     $("step3").classList.add("done");
   }catch(e){
     const last=logBox.querySelector(".logline.run")||logBox.lastChild;
-    if(last)setBad(last,(last.querySelector(".tx").textContent||"")+" — "+e.message);
+    if(last)setBad(last,(last.querySelector(".tx").textContent||"")+" - "+e.message);
     else setBad(logStep("Error"),e.message);
   }finally{
     $("publishBtn").disabled=false;

@@ -1,10 +1,10 @@
-# CLAUDE.md — Pages Launcher (uOttawa Faculty of Science)
+# CLAUDE.md - Pages Launcher (uOttawa Faculty of Science)
 
 ## What this project is
 A **single-page web tool** that lets non-technical users publish and update a
 **static website** on **GitHub Pages** with no Git and no command line. The user
 already has their site files; this tool only **deploys** them. It is NOT a CMS and
-does NOT author content — that was an explicit requirement.
+does NOT author content - that was an explicit requirement.
 
 Audience: uOttawa Faculty of Science / Faculté des sciences. The UI is bilingual
 (EN/FR) and uses the uOttawa garnet (`#8b1d41`) identity.
@@ -12,12 +12,12 @@ Audience: uOttawa Faculty of Science / Faculté des sciences. The UI is bilingua
 ## The design decision that shaped everything
 GitHub Pages has three friction points for a novice: (1) a GitHub account, (2)
 authorizing a tool to write to a repo, (3) knowing what to put in the repo. Since
-users **already have their files**, (3) is solved — so this tool is pure
+users **already have their files**, (3) is solved - so this tool is pure
 **deployment**: create repo if needed → commit files → enable Pages → return the
 live URL. "Create" and "update" are the same action (a commit).
 
 ## Architecture (deliberately tiny)
-- **`index.html`** — the entire app. No build step, no framework, no dependencies
+- **`index.html`** - the entire app. No build step, no framework, no dependencies
   except two Google Fonts. Talks **directly** to `api.github.com` from the browser.
   - Publish flow = the Git Data API: `blobs → tree → commit → move/create ref`,
     so many files land in **one commit**. `base_tree` is set in *update* mode
@@ -30,7 +30,7 @@ live URL. "Create" and "update" are the same action (a commit).
   - **Auth**: primary path is OAuth ("Sign in with GitHub"); fallback is pasting a
     fine-grained PAT under "Advanced". `connectWithToken()` is the shared endpoint
     both paths converge on.
-- **`oauth-worker/`** — a Cloudflare Worker doing ONLY the OAuth `code → token`
+- **`oauth-worker/`** - a Cloudflare Worker doing ONLY the OAuth `code → token`
   exchange (the one step that needs the client *secret*). `POST /exchange`. CORS is
   locked to `ALLOWED_ORIGINS`.
 
@@ -51,9 +51,9 @@ the page's final origin exactly (e.g. `https://jrbecart-uo.github.io`).
 - OAuth scope requested is `repo` (needed to create repos + enable Pages).
 - `*.github.io` repo name → user site at `/`; any other name → project site at
   `/<repo>/`. The result URL logic depends on this.
-- New repos take a moment to get a branch ref — the read step retries 6× with 800ms.
+- New repos take a moment to get a branch ref - the read step retries 6× with 800ms.
 - Keep it dependency-free and single-file. If you add OAuth UI changes, route ALL
-  user-visible strings through the `DICT`/`t()` system — never hardcode English/French.
+  user-visible strings through the `DICT`/`t()` system - never hardcode English/French.
 - Vanilla JS only here; the Date.now/Math.random restriction in the harness applies
   to *workflow scripts*, not to this browser code.
 

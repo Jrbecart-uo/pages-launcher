@@ -1,5 +1,5 @@
 /**
- * Pages Launcher — GitHub OAuth token-exchange worker (Cloudflare Workers).
+ * Pages Launcher - GitHub OAuth token-exchange worker (Cloudflare Workers).
  *
  * The static page (index.html) can't hold the OAuth client secret, so this tiny
  * worker performs the one server-side step: trade the temporary ?code= that
@@ -9,7 +9,7 @@
  *   POST /exchange   { "code": "..." }  ->  { "access_token": "...", "scope": "...", "token_type": "..." }
  *   GET  /           health check
  *
- * Secrets / vars (set with wrangler — see wrangler.toml):
+ * Secrets / vars (set with wrangler - see wrangler.toml):
  *   GITHUB_CLIENT_ID       OAuth App client ID      (var, public)
  *   GITHUB_CLIENT_SECRET   OAuth App client secret  (secret, NEVER commit)
  *   ALLOWED_ORIGINS        comma-separated allowlist of page origins (var)
@@ -58,7 +58,7 @@ export default {
     }
 
     // health check
-    return new Response("Pages Launcher OAuth worker — POST /exchange", {
+    return new Response("Pages Launcher OAuth worker - POST /exchange", {
       status: 200,
       headers: { ...cors, "Content-Type": "text/plain" },
     });

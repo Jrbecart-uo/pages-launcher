@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pages Launcher — publish a static site to GitHub Pages</title>
+<title>Pages Launcher - publish a static site to GitHub Pages</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -172,7 +172,7 @@
     <!-- STEP 1 -->
     <section class="step anim" id="step1" style="animation-delay:.05s">
       <div class="step-head"><div class="num" id="num1">1</div><div class="step-title">Connect GitHub</div></div>
-      <p class="hint">Paste a personal access token so the demo can create the repo and push your files. In the real version this is a single “Sign in with GitHub” button — users never see a token.</p>
+      <p class="hint">Paste a personal access token so the demo can create the repo and push your files. In the real version this is a single “Sign in with GitHub” button - users never see a token.</p>
       <div id="connectArea">
         <label class="fld">Personal access token</label>
         <div class="row">
@@ -203,7 +203,7 @@
       <div class="drop" id="drop" style="margin-top:16px">
         <div class="big-txt">Drop your site folder or files here</div>
         <div class="small-txt">index.html should be at the top level</div>
-        <div class="or">— or —</div>
+        <div class="or">- or -</div>
         <button class="btn ghost" id="pickFolder" style="font-size:12px">Choose folder</button>
         <button class="btn ghost" id="pickFiles" style="font-size:12px">Choose files</button>
         <input id="folderInput" type="file" webkitdirectory directory multiple hidden>
@@ -261,7 +261,7 @@ $("connectBtn").onclick=async()=>{
   try{
     state.token=t;
     const r=await gh("/user");
-    if(!r.ok)throw new Error(r.status===401?"Token rejected — check it’s valid and unexpired.":"GitHub said: "+r.status);
+    if(!r.ok)throw new Error(r.status===401?"Token rejected - check it’s valid and unexpired.":"GitHub said: "+r.status);
     const u=await r.json();
     state.login=u.login;
     $("avatar").src=u.avatar_url;$("login").textContent=u.login;
@@ -387,7 +387,7 @@ $("publishBtn").onclick=async()=>{
     setRun(sRepo);
     let rr=await gh(`/repos/${owner}/${repo}`);
     if(rr.status===404){
-      setOk(sRepo,"Repository not found — creating it");
+      setOk(sRepo,"Repository not found - creating it");
       const sCreate=logStep("Creating "+repo+" (public)");
       setRun(sCreate);
       const cr=await gh("/user/repos",{method:"POST",body:JSON.stringify({name:repo,auto_init:true,private:false,description:"Published with Pages Launcher"})});
@@ -417,7 +417,7 @@ $("publishBtn").onclick=async()=>{
       const cm=await(await gh(`/repos/${owner}/${repo}/git/commits/${baseSha}`)).json();
       baseTree=cm.tree.sha;
     }
-    setOk(sBase,baseSha?"On commit "+baseSha.slice(0,7):"Empty repo — first commit");
+    setOk(sBase,baseSha?"On commit "+baseSha.slice(0,7):"Empty repo - first commit");
 
     /* 3. upload files as blobs */
     const sBlobs=logStep("Uploading "+state.files.length+" file(s)");
@@ -429,7 +429,7 @@ $("publishBtn").onclick=async()=>{
       const bl=await gh(`/repos/${owner}/${repo}/git/blobs`,{method:"POST",body:JSON.stringify({content,encoding:"base64"})});
       if(!bl.ok)throw new Error("Upload failed for "+f.path+" ("+bl.status+")");
       tree.push({path:f.path,mode:"100644",type:"blob",sha:(await bl.json()).sha});
-      sBlobs.lastChild.textContent=`Uploading file(s)  ${i+1}/${state.files.length} — ${f.path}`;
+      sBlobs.lastChild.textContent=`Uploading file(s)  ${i+1}/${state.files.length} - ${f.path}`;
     }
     setOk(sBlobs,"Uploaded "+state.files.length+" file(s)");
 
@@ -446,7 +446,7 @@ $("publishBtn").onclick=async()=>{
     /* 5. commit + move branch */
     const sCommit=logStep("Committing");
     setRun(sCommit);
-    const cmBody={message:`Publish via Pages Launcher — ${new Date().toISOString()}`,tree:newTree};
+    const cmBody={message:`Publish via Pages Launcher - ${new Date().toISOString()}`,tree:newTree};
     if(baseSha)cmBody.parents=[baseSha];
     const cmRes=await gh(`/repos/${owner}/${repo}/git/commits`,{method:"POST",body:JSON.stringify(cmBody)});
     if(!cmRes.ok)throw new Error("Commit failed ("+cmRes.status+")");
@@ -469,7 +469,7 @@ $("publishBtn").onclick=async()=>{
       if(!en.ok&&en.status!==409)throw new Error("Enabling Pages failed ("+en.status+"). Check Pages: write on the token.");
       setOk(sPages,"Pages enabled");
     }else if(has.ok){
-      setOk(sPages,"Pages already on — site will rebuild");
+      setOk(sPages,"Pages already on - site will rebuild");
     }else{
       setOk(sPages,"Pushed (verify Pages in repo Settings)");
     }
@@ -482,7 +482,7 @@ $("publishBtn").onclick=async()=>{
     $("step3").classList.add("done");
   }catch(e){
     const last=logBox.querySelector(".logline.run")||logBox.lastChild;
-    if(last)setBad(last,(last.lastChild.textContent||"")+" — "+e.message);
+    if(last)setBad(last,(last.lastChild.textContent||"")+" - "+e.message);
     else logStep("Error: "+e.message);
   }finally{
     $("publishBtn").disabled=false;
